@@ -1,26 +1,44 @@
-// Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Mobile nav toggle
-const navToggle = document.querySelector('.mobile-nav-toggle');
-const mainNav = document.getElementById('main-nav');
-navToggle.addEventListener('click', () => {
-    const isOpen = mainNav.classList.toggle('is-open');
-    navToggle.setAttribute('aria-expanded', isOpen);
+/* ---------- Typing effect ---------- */
+const roles = ['Data Analytics Enthusiast', 'Python Developer', 'Dashboard Builder'];
+const typedEl = document.getElementById('typed-role');
+let roleIndex = 0, charIndex = 0, deleting = false;
+
+function typeLoop() {
+    const current = roles[roleIndex];
+    if (!deleting) {
+        charIndex++;
+        typedEl.textContent = current.slice(0, charIndex);
+        if (charIndex === current.length) {
+            deleting = true;
+            setTimeout(typeLoop, 1400);
+            return;
+        }
+    } else {
+        charIndex--;
+        typedEl.textContent = current.slice(0, charIndex);
+        if (charIndex === 0) {
+            deleting = false;
+            roleIndex = (roleIndex + 1) % roles.length;
+        }
+    }
+    setTimeout(typeLoop, deleting ? 40 : 70);
+}
+if (typedEl) typeLoop();
+
+/* ---------- Mobile nav ---------- */
+const mobileToggle = document.getElementById('mobile-toggle');
+const navbarInner = document.querySelector('.navbar-inner');
+mobileToggle.addEventListener('click', () => {
+    const isOpen = navbarInner.classList.toggle('is-open');
+    mobileToggle.setAttribute('aria-expanded', isOpen);
 });
 document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => mainNav.classList.remove('is-open'));
+    link.addEventListener('click', () => navbarInner.classList.remove('is-open'));
 });
 
-// Scroll progress bar
-const progressBar = document.getElementById('scroll-progress');
-window.addEventListener('scroll', () => {
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
-    progressBar.style.width = pct + '%';
-});
-
-// Active nav link highlight on scroll
+/* ---------- Active nav highlight ---------- */
 const sections = document.querySelectorAll('main .section[id]');
 const navLinks = document.querySelectorAll('.nav-link[data-nav]');
 if ('IntersectionObserver' in window) {
@@ -37,9 +55,7 @@ if ('IntersectionObserver' in window) {
     sections.forEach(s => navObserver.observe(s));
 }
 
-// Scroll-reveal animation — only enable the hidden/animated state when the
-// browser actually supports IntersectionObserver, so content is never
-// silently stuck invisible.
+/* ---------- Scroll reveal (fail-safe: content visible without JS) ---------- */
 if ('IntersectionObserver' in window) {
     document.documentElement.classList.add('js-anim');
     const revealObserver = new IntersectionObserver((entries) => {
@@ -49,35 +65,18 @@ if ('IntersectionObserver' in window) {
                 revealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 }
 
-// Certificate lightbox
-const lightbox = document.getElementById('cert-lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const lightboxTitle = document.getElementById('lightbox-title');
-const lightboxDesc = document.getElementById('lightbox-desc');
-
-document.querySelectorAll('.cert-item').forEach(item => {
-    item.addEventListener('click', () => {
-        lightboxImg.src = item.dataset.image;
-        lightboxTitle.textContent = item.dataset.title;
-        lightboxDesc.textContent = item.dataset.desc;
-        lightbox.classList.add('is-open');
-        lightbox.setAttribute('aria-hidden', 'false');
-    });
+/* ---------- Back to top ---------- */
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 500);
 });
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-function closeLightbox() {
-    lightbox.classList.remove('is-open');
-    lightbox.setAttribute('aria-hidden', 'true');
-}
-document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
-
-// Contact form (Formspree) — graceful fallback if not configured yet
+/* ---------- Contact form (Formspree) ---------- */
 const form = document.getElementById('contact-form');
 const feedback = document.getElementById('form-feedback');
 if (form) {
@@ -92,16 +91,14 @@ if (form) {
                 body: new FormData(form),
                 headers: { 'Accept': 'application/json' }
             });
-            if (res.ok) {
-                feedback.textContent = "Thanks — I'll get back to you soon.";
-                form.reset();
-            } else {
-                feedback.textContent = 'Something went wrong. Please email me directly.';
-            }
+            feedback.textContent = res.ok
+                ? "Thanks — I'll get back to you soon."
+                : 'Something went wrong. Please email me directly.';
+            if (res.ok) form.reset();
         } catch (err) {
             feedback.textContent = 'Something went wrong. Please email me directly.';
         }
         btn.disabled = false;
-        btn.textContent = 'Send message';
+        btn.textContent = 'Send Message';
     });
 }

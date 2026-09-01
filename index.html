@@ -1,104 +1,472 @@
-document.getElementById('year').textContent = new Date().getFullYear();
+<!DOCTYPE html>
+<html lang="en">
 
-/* ---------- Typing effect ---------- */
-const roles = ['Data Analytics Enthusiast', 'Python Developer', 'Dashboard Builder'];
-const typedEl = document.getElementById('typed-role');
-let roleIndex = 0, charIndex = 0, deleting = false;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Sahil Kumar — B.Tech CSE student and Data Analytics enthusiast. Python, SQL, and dashboard projects backed by real datasets and live results.">
+    <meta name="keywords" content="Sahil Kumar, Data Analytics, Python, SQL, Portfolio, Tula's Institute, Dehradun">
+    <meta name="author" content="Sahil Kumar">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Sahil Kumar — Data Analytics Portfolio">
+    <meta property="og:description" content="B.Tech CSE student specializing in Python-driven data analysis and dashboards.">
+    <meta property="og:image" content="assets/profile.jpg">
 
-function typeLoop() {
-    const current = roles[roleIndex];
-    if (!deleting) {
-        charIndex++;
-        typedEl.textContent = current.slice(0, charIndex);
-        if (charIndex === current.length) {
-            deleting = true;
-            setTimeout(typeLoop, 1400);
-            return;
-        }
-    } else {
-        charIndex--;
-        typedEl.textContent = current.slice(0, charIndex);
-        if (charIndex === 0) {
-            deleting = false;
-            roleIndex = (roleIndex + 1) % roles.length;
-        }
-    }
-    setTimeout(typeLoop, deleting ? 40 : 70);
-}
-if (typedEl) typeLoop();
+    <title>Sahil Kumar — Data Analytics Portfolio</title>
 
-/* ---------- Mobile nav ---------- */
-const mobileToggle = document.getElementById('mobile-toggle');
-const navbarInner = document.querySelector('.navbar-inner');
-mobileToggle.addEventListener('click', () => {
-    const isOpen = navbarInner.classList.toggle('is-open');
-    mobileToggle.setAttribute('aria-expanded', isOpen);
-});
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => navbarInner.classList.remove('is-open'));
-});
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-/* ---------- Active nav highlight ---------- */
-const sections = document.querySelectorAll('main .section[id]');
-const navLinks = document.querySelectorAll('.nav-link[data-nav]');
-if ('IntersectionObserver' in window) {
-    const navObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.getAttribute('id');
-                navLinks.forEach(link => {
-                    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-                });
-            }
-        });
-    }, { rootMargin: '-40% 0px -50% 0px' });
-    sections.forEach(s => navObserver.observe(s));
-}
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
 
-/* ---------- Scroll reveal (fail-safe: content visible without JS) ---------- */
-if ('IntersectionObserver' in window) {
-    document.documentElement.classList.add('js-anim');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-}
+<body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
 
-/* ---------- Back to top ---------- */
-const backToTop = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => {
-    backToTop.classList.toggle('visible', window.scrollY > 500);
-});
-backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    <header class="navbar">
+        <div class="navbar-inner">
+            <a href="#home" class="logo">SK</a>
+            <nav class="nav" id="main-nav">
+                <a href="#about" class="nav-link" data-nav>About</a>
+                <a href="#skills" class="nav-link" data-nav>Skills</a>
+                <a href="#projects" class="nav-link" data-nav>Projects</a>
+                <a href="#certificates" class="nav-link" data-nav>Certificates</a>
+                <a href="#education" class="nav-link" data-nav>Education</a>
+                <a href="#contact" class="nav-link" data-nav>Contact</a>
+            </nav>
+            <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
 
-/* ---------- Contact form (Formspree) ---------- */
-const form = document.getElementById('contact-form');
-const feedback = document.getElementById('form-feedback');
-if (form) {
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('form-submit-btn');
-        btn.disabled = true;
-        btn.textContent = 'Sending…';
-        try {
-            const res = await fetch(form.action, {
-                method: 'POST',
-                body: new FormData(form),
-                headers: { 'Accept': 'application/json' }
-            });
-            feedback.textContent = res.ok
-                ? "Thanks — I'll get back to you soon."
-                : 'Something went wrong. Please email me directly.';
-            if (res.ok) form.reset();
-        } catch (err) {
-            feedback.textContent = 'Something went wrong. Please email me directly.';
-        }
-        btn.disabled = false;
-        btn.textContent = 'Send Message';
-    });
-}
+    <main>
+        <!-- HERO -->
+        <section id="home" class="section hero">
+            <div class="hero-inner">
+                <div class="hero-photo-wrap">
+                    <div class="hero-photo-ring"></div>
+                    <img src="assets/profile.jpg" alt="Sahil Kumar" class="hero-photo">
+                </div>
+                <p class="mono-tag">HI, I'M</p>
+                <h1 class="hero-name">Sahil Kumar</h1>
+                <p class="hero-role"><span id="typed-role"></span><span class="cursor">|</span></p>
+                <p class="hero-desc">B.Tech Computer Science Engineering Student<br>at Tula's Institute, Dehradun</p>
+                <div class="hero-actions">
+                    <a href="assets/Sahil_Kumar_Resume.pdf" class="btn btn-grad" download="Sahil_Kumar_Resume.pdf">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download Resume
+                    </a>
+                    <a href="#projects" class="btn btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        View Projects
+                    </a>
+                    <a href="#contact" class="btn btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                        Contact Me
+                    </a>
+                </div>
+            </div>
+            <a href="#about" class="scroll-cue" aria-label="Scroll down">
+                <span class="scroll-cue-dot"></span>
+            </a>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="section">
+            <div class="container">
+                <p class="eyebrow reveal">GET TO KNOW ME</p>
+                <h2 class="section-title reveal">About <span class="grad">Me</span></h2>
+                <div class="divider reveal"></div>
+
+                <div class="about-grid">
+                    <div class="about-copy reveal">
+                        <p>
+                            I'm a third-year B.Tech Computer Science &amp; Engineering student who fell into
+                            data analytics the way most analysts do — by noticing a pattern nobody had pointed
+                            out yet, and wanting to prove it with numbers instead of a hunch.
+                        </p>
+                        <p>
+                            My toolkit is <strong>Python</strong> (pandas, seaborn, SciPy, NumPy) for analysis,
+                            <strong> SQL</strong> for querying, and <strong>Google Looker Studio</strong> for turning
+                            findings into dashboards people actually use. During my internship at
+                            <strong> Cognifyz Technologies</strong>, I cleaned and analyzed a 9,500-row restaurant
+                            dataset — chain detection, price-to-rating correlation, geographic clustering.
+                        </p>
+                        <p>
+                            I'm currently sharpening my statistics, advanced visualization, and machine
+                            learning fundamentals, and I'm open to Data Analytics / Data Science internships.
+                        </p>
+                    </div>
+                    <div class="about-icons reveal">
+                        <div class="icon-card">
+                            <span class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v1a3 3 0 0 0-3 3v1a3 3 0 0 0 0 6v1a3 3 0 0 0 3 3v1a3 3 0 0 0 6 0v-1a3 3 0 0 0 3-3v-1a3 3 0 0 0 0-6V9a3 3 0 0 0-3-3V5a3 3 0 0 0-3-3Z"/></svg>
+                            </span>
+                            <span class="icon-label">Data Analysis</span>
+                        </div>
+                        <div class="icon-card">
+                            <span class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            </span>
+                            <span class="icon-label">Python Development</span>
+                        </div>
+                        <div class="icon-card">
+                            <span class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                            </span>
+                            <span class="icon-label">SQL Database Modeling</span>
+                        </div>
+                        <div class="icon-card">
+                            <span class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                            </span>
+                            <span class="icon-label">Data Visualization</span>
+                        </div>
+                        <div class="icon-card">
+                            <span class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                            </span>
+                            <span class="icon-label">Statistical Analysis</span>
+                        </div>
+                        <div class="icon-card">
+                            <span class="icon-box">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            </span>
+                            <span class="icon-label">Exploratory Data Analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-row reveal">
+                    <div class="stat-box">
+                        <span class="stat-num grad">4</span>
+                        <span class="stat-caption">Years of Study</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num grad">17<small>+</small></span>
+                        <span class="stat-caption">Technologies</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num grad">3</span>
+                        <span class="stat-caption">Projects Built</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num grad">3</span>
+                        <span class="stat-caption">Certifications</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills" class="section section-alt">
+            <div class="container">
+                <p class="eyebrow reveal">WHAT I WORK WITH</p>
+                <h2 class="section-title reveal">My <span class="grad">Skills</span></h2>
+                <div class="divider reveal"></div>
+
+                <div class="skills-block reveal">
+                    <p class="skills-cat">LANGUAGES</p>
+                    <div class="skill-chips">
+                        <span class="skill-chip"><span class="skill-icon">&lt;/&gt;</span>Python</span>
+                        <span class="skill-chip"><span class="skill-icon">&lt;/&gt;</span>SQL</span>
+                        <span class="skill-chip"><span class="skill-icon">&lt;/&gt;</span>C++</span>
+                        <span class="skill-chip"><span class="skill-icon">&lt;/&gt;</span>Java</span>
+                        <span class="skill-chip"><span class="skill-icon">&lt;/&gt;</span>C</span>
+                        <span class="skill-chip"><span class="skill-icon">&lt;/&gt;</span>HTML</span>
+                    </div>
+                </div>
+
+                <div class="skills-block reveal">
+                    <p class="skills-cat">DATA ANALYSIS &amp; VISUALIZATION</p>
+                    <div class="skill-chips">
+                        <span class="skill-chip"><span class="skill-icon">▤</span>Pandas</span>
+                        <span class="skill-chip"><span class="skill-icon">▤</span>NumPy</span>
+                        <span class="skill-chip"><span class="skill-icon">▤</span>SciPy</span>
+                        <span class="skill-chip"><span class="skill-icon">▤</span>Seaborn</span>
+                        <span class="skill-chip"><span class="skill-icon">▤</span>Matplotlib</span>
+                        <span class="skill-chip"><span class="skill-icon">▤</span>Excel</span>
+                        <span class="skill-chip"><span class="skill-icon">▤</span>Looker Studio</span>
+                    </div>
+                </div>
+
+                <div class="skills-block reveal">
+                    <p class="skills-cat">TOOLS</p>
+                    <div class="skill-chips">
+                        <span class="skill-chip"><span class="skill-icon">⑂</span>Git</span>
+                        <span class="skill-chip"><span class="skill-icon">⑂</span>GitHub</span>
+                        <span class="skill-chip"><span class="skill-icon">⑂</span>Jupyter Notebook</span>
+                        <span class="skill-chip"><span class="skill-icon">⑂</span>VS Code</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="section">
+            <div class="container">
+                <p class="eyebrow reveal">WHAT I'VE BUILT</p>
+                <h2 class="section-title reveal">Featured <span class="grad">Projects</span></h2>
+                <div class="divider reveal"></div>
+
+                <div class="project-grid">
+                    <article class="project-card reveal">
+                        <div class="project-thumb">
+                            <img src="assets/projects/hr-attrition-thumb.png" alt="HR Attrition dashboard chart — overtime vs attrition rate">
+                        </div>
+                        <div class="project-body">
+                            <h3 class="project-title">HR Employee Attrition Analytics Dashboard</h3>
+                            <p class="project-desc">
+                                Interactive Looker Studio dashboard analyzing 1,470 employee records.
+                                Overtime employees leave at <strong>3× the rate</strong> of everyone else —
+                                the strongest signal in the dataset.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag-pill">Looker Studio</span>
+                                <span class="tag-pill">Calculated Fields</span>
+                                <span class="tag-pill">Python</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="https://github.com/sahilkumar620/hr-attrition-dashboard" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                    GitHub
+                                </a>
+                                <a href="https://datastudio.google.com/s/h8-3UIfMISI" target="_blank" rel="noopener noreferrer" class="btn btn-grad btn-sm">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                    Live Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal">
+                        <div class="project-thumb">
+                            <img src="assets/projects/superstore-thumb.png" alt="Superstore analysis chart — discount vs profit">
+                        </div>
+                        <div class="project-body">
+                            <h3 class="project-title">Superstore Sales &amp; Profitability Analysis</h3>
+                            <p class="project-desc">
+                                Analyzed three years of retail transactions across 9,994 orders.
+                                Profit turns negative past <strong>~40% discount</strong> — a correlation
+                                of −0.22 that pricing teams should know about.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag-pill">Python</span>
+                                <span class="tag-pill">Pandas</span>
+                                <span class="tag-pill">Matplotlib</span>
+                                <span class="tag-pill">Seaborn</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="https://github.com/sahilkumar620/superstore-sales-analysis-" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                    GitHub
+                                </a>
+                                <a href="https://datastudio.google.com/s/sYqoE_jFQoY" target="_blank" rel="noopener noreferrer" class="btn btn-grad btn-sm">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                    Live Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card reveal">
+                        <div class="project-thumb project-thumb-icon">
+                            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                        </div>
+                        <div class="project-body">
+                            <h3 class="project-title">Zomato Restaurant Data Analysis</h3>
+                            <p class="project-desc">
+                                Grew out of my Cognifyz Technologies internship — chain detection,
+                                cuisine combinations, and price-to-rating patterns across
+                                <strong> 9,500+ restaurant records</strong>, extended independently after
+                                the internship ended.
+                            </p>
+                            <div class="project-tags">
+                                <span class="tag-pill">Python</span>
+                                <span class="tag-pill">Pandas</span>
+                                <span class="tag-pill">Seaborn</span>
+                                <span class="tag-pill">SciPy</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="https://github.com/sahilkumar620/zomato-restaurant-data-analysis" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="see-all reveal">
+                    <a href="https://github.com/sahilkumar620" target="_blank" rel="noopener noreferrer" class="btn btn-outline">View All Repositories</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATES -->
+        <section id="certificates" class="section section-alt">
+            <div class="container">
+                <p class="eyebrow reveal">PROOF OF WORK</p>
+                <h2 class="section-title reveal">Certificates</h2>
+                <div class="divider reveal"></div>
+
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item side-left reveal">
+                        <div class="timeline-card">
+                            <p class="cert-org grad">NPTEL — IIT Kharagpur</p>
+                            <h3 class="cert-title">Java Elite Silver Medal</h3>
+                            <p class="cert-desc">Programming in Java — scored 88% (Elite certification), 12-week course, Jan–Apr 2026.</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+
+                    <div class="timeline-item side-right reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <p class="cert-org grad">Cognifyz IT Solutions</p>
+                            <h3 class="cert-title">Data Analysis Internship</h3>
+                            <p class="cert-desc">Internship Completion Certificate — Data Analysis Intern, June 30 – July 30, 2026 (ID: CTI/A1/C382365).</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item side-left reveal">
+                        <div class="timeline-card">
+                            <p class="cert-org grad">CodSoft</p>
+                            <h3 class="cert-title">Web Development Internship</h3>
+                            <p class="cert-desc">Virtual Internship, 4 weeks — July 5 to August 5, 2025 (Certificate ID: 5b975c4).</p>
+                        </div>
+                        <div class="timeline-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION -->
+        <section id="education" class="section">
+            <div class="container">
+                <p class="eyebrow reveal">ACADEMIC BACKGROUND</p>
+                <h2 class="section-title reveal">Education</h2>
+                <div class="divider reveal"></div>
+
+                <div class="edu-card reveal">
+                    <div>
+                        <h3 class="edu-degree">B.Tech, Computer Science &amp; Engineering</h3>
+                        <p class="edu-school">Tula's Institute, Dehradun</p>
+                    </div>
+                    <div class="edu-meta">
+                        <span class="edu-years">2024 — 2028</span>
+                        <span class="edu-cgpa grad">7.1 / 10 CGPA</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section section-alt">
+            <div class="container">
+                <p class="eyebrow reveal">LET'S CONNECT</p>
+                <h2 class="section-title reveal">Get In <span class="grad">Touch</span></h2>
+                <div class="divider reveal"></div>
+
+                <div class="contact-grid">
+                    <div class="reveal">
+                        <p class="contact-lede">
+                            I'm always open to discussing Data Analytics internships, collaborations,
+                            or just a chat about interesting datasets. Feel free to reach out!
+                        </p>
+                        <div class="contact-cards">
+                            <a href="mailto:sahilkumar620409@gmail.com" class="contact-card">
+                                <span class="contact-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                </span>
+                                <span>
+                                    <span class="contact-label">EMAIL</span>
+                                    <span class="contact-value">sahilkumar620409@gmail.com</span>
+                                </span>
+                            </a>
+                            <a href="tel:+917319899379" class="contact-card">
+                                <span class="contact-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                </span>
+                                <span>
+                                    <span class="contact-label">PHONE</span>
+                                    <span class="contact-value">+91 73198 99379</span>
+                                </span>
+                            </a>
+                            <a href="https://linkedin.com/in/sahil-kumar-796aa52b4" target="_blank" rel="noopener noreferrer" class="contact-card">
+                                <span class="contact-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                                </span>
+                                <span>
+                                    <span class="contact-label">LINKEDIN</span>
+                                    <span class="contact-value">Sahil Kumar</span>
+                                </span>
+                            </a>
+                            <a href="assets/Sahil_Kumar_Resume.pdf" download="Sahil_Kumar_Resume.pdf" class="contact-card">
+                                <span class="contact-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </span>
+                                <span>
+                                    <span class="contact-label">RESUME</span>
+                                    <span class="contact-value">Download Resume</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <form id="contact-form" class="contact-form reveal" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                        <input type="hidden" name="_subject" value="New message from portfolio">
+                        <label>Your Name<input type="text" name="name" placeholder="John Doe" required></label>
+                        <label>Your Email<input type="email" name="email" placeholder="john@example.com" required></label>
+                        <label>Message<textarea name="message" rows="4" placeholder="Tell me about the opportunity…" required></textarea></label>
+                        <button type="submit" class="btn btn-grad btn-full" id="form-submit-btn">Send Message</button>
+                        <p id="form-feedback" class="form-feedback"></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p class="footer-name grad">Sahil Kumar</p>
+            <p class="footer-tagline">Data Analytics Enthusiast passionate about turning raw data into decisions that matter.</p>
+            <nav class="footer-nav">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#certificates">Certificates</a>
+                <a href="#education">Education</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div class="footer-social">
+                <a href="mailto:sahilkumar620409@gmail.com" aria-label="Email">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </a>
+                <a href="https://linkedin.com/in/sahil-kumar-796aa52b4" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                <a href="https://github.com/sahilkumar620" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                </a>
+            </div>
+            <p class="footer-copy">© <span id="year"></span> Sahil Kumar. Built with data, not templates.</p>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
